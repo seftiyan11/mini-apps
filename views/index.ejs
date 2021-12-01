@@ -3,13 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" integrity="sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ==" crossorigin="anonymous" />
-    <title>Mini apps</title>
-    <h4>HOMEPAGE</h4>
-    <p>Selamat datang di komunitas profesional Anda</p>    
+    <meta name="google-signin-client_id" content="29895534022-49o0uv13q18vup9mfhicqr4j8649l1us.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <title>Login</title>
 </head>
-
 <body>
-    <label>Bergabung Sekarang</label>
-    <button><a href="/login">Join with Google</a></button>
+    <h4> Fullstack JS with Nodejs</h4>
+    <form>
+        <label>Email / Username</label>
+            <input type="text and number">
+            <label>Password</label>
+            <input type="text and number" value="" id="myInput">
+            <input type="checkbox" onclick="myFunction()">Show Password<br>
+
+<script>
+    function myFunction() {
+        var x = document.getElementById("myInput");
+            if  (x.type === "password") {
+                    x.type = "text";
+            } else {
+                x.type = "password";
+        }
+    }
+</script>
+            <button style="background-color:blue; border-color:white; color:white; height: 50px; width:180px"><a href="/pages">Login</a></button>
+    </form>
+    
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <!-- <a href="#" onclick="signOut();">Sign out</a> -->
+    <script>
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+        console.log('User signed out.');
+        });
+    }
+    </script>
+
+    <script>
+    function onSignIn(googleUser) {
+        // var profile = googleUser.getBasicProfile();
+        // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+       // console.log('Name: ' + profile.getName());
+       // console.log('Image URL: ' + profile.getImageUrl());
+       // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log(id_token);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/index');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function() {
+            console.log('Signed in as: ' + xhr.responseText);
+            if(xhr.responseText == 'success'){
+                signOut();
+                location.assign('/profile')
+            }
+        };
+        xhr.send(JSON.stringify({token : id_token}));
+      }
+    </script>
+    
 </body>
 </html>

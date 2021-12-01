@@ -18,19 +18,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
 
+
 app.get('/', (req, res)=>{
-    res.render('index')
+    res.render('index');
 })
 
-app.get('/pages', (req, res)=>{
-    res.render('pages');
-})
-
-app.get('/login', (req, res)=>{
-    res.render('login');
-})
-
-app.post('/login', (req, res)=>{
+app.post('/index', (req, res)=>{
     let token = req.body.token;
 
     async function verify() {
@@ -61,9 +54,13 @@ app.get('/protectedRoute', checkAuthenticated, (req,res)=>{
 
 app.get('/logout', (req, res)=>{
     res.clearCookie('session-token');
-    res.redirect('/login')
-
+    res.redirect('/')
 })
+
+app.get('/pages', (req, res)=>{
+    res.render('pages');
+})
+
 
 // for google login authentication (function)
 
@@ -88,7 +85,7 @@ function checkAuthenticated(req, res, next){
           next();
       })
       .catch(err=>{
-          res.redirect('/login')
+          res.redirect('/index')
       })
 
 }
